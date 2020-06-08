@@ -101,14 +101,12 @@ interface IRepo {
   if (!gist) return;
 
   const filename = Object.keys(gist.data.files)[0];
-  const titleEarly = process.env.TITLE_EARLY || '我通常在日间工作 🐤';
-  const titleNight = process.env.TITLE_NIGHT || '我通常在夜晚工作 🦉';
   await octokit.gists.update({
     gist_id: process.env.GIST_ID,
     files: {
       [filename]: {
         // eslint-disable-next-line quotes
-        filename: (morning + daytime) > (evening + night) ? titleEarly : titleNight,
+        filename: (morning + daytime) > (evening + night) ? '我通常在日间提交代码到 Github 🐤' : '我通常在晚上提交代码到 Github 🦉',
         content: lines.join('\n'),
       },
     },
