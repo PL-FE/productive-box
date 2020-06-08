@@ -15,7 +15,7 @@ interface IRepo {
   owner: string;
 }
 
-(async() => {
+(async () => {
   /**
    * First, get user id
    */
@@ -40,7 +40,7 @@ interface IRepo {
    * Third, get commit time and parse into commit-time/hour diagram
    */
   const committedTimeResponseMap = await Promise.all(
-    repos.map(({name, owner}) => githubQuery(createCommittedDateQuery(id, name, owner)))
+    repos.map(({ name, owner }) => githubQuery(createCommittedDateQuery(id, name, owner)))
   ).catch(error => console.error(`Unable to get the commit info\n${error}`));
 
   if (!committedTimeResponseMap) return;
@@ -73,18 +73,18 @@ interface IRepo {
   if (!sum) return;
 
   const oneDay = [
-    { label: '🌞 Morning', commits: morning },
-    { label: '🌆 Daytime', commits: daytime },
-    { label: '🌃 Evening', commits: evening },
-    { label: '🌙 Night', commits: night },
+    { label: '🌞 早晨', commits: morning },
+    { label: '🌆 日间', commits: daytime },
+    { label: '🌃 晚上', commits: evening },
+    { label: '🌙 深夜', commits: night },
   ];
 
   const lines = oneDay.reduce((prev, cur) => {
     const percent = cur.commits / sum * 100;
     const line = [
-      `${cur.label}`.padEnd(10),
+      `${cur.label}`.padEnd(5),
       `${cur.commits.toString().padStart(5)} commits`.padEnd(14),
-      generateBarChart(percent, 21),
+      generateBarChart(percent, 25),
       String(percent.toFixed(1)).padStart(5) + '%',
     ];
 
@@ -101,12 +101,14 @@ interface IRepo {
   if (!gist) return;
 
   const filename = Object.keys(gist.data.files)[0];
+  const titleEarly = process.env.TITLE_EARLY || '我通常在日间工作 🐤';
+  const titleNight = process.env.TITLE_NIGHT || '我通常在夜晚工作 🦉';
   await octokit.gists.update({
     gist_id: process.env.GIST_ID,
     files: {
       [filename]: {
         // eslint-disable-next-line quotes
-        filename: (morning + daytime) > (evening + night) ? "I'm an early 🐤" : "I'm a night 🦉",
+        filename: (morning + daytime) > (evening + night) ? titleEarly : titleNight,
         content: lines.join('\n'),
       },
     },
