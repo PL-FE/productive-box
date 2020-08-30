@@ -3,16 +3,19 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
   schedule:
-    - cron: "0 0 * * *"
+    - cron: '0 0 * * *'
 jobs:
   update-gist:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Update gist
-        uses: journey-ad/productive-box@master
+        uses: PL-FE/productive-box@master
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GIST_ID: dbaf0b3803b7ea87905e24241f63c94f
+          GIST_ID: 6194f1b205f4dd2a699b8c12eab05a13
           TIMEZONE: Asia/Shanghai
