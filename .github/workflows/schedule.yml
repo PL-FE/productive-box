@@ -18,5 +18,5 @@ jobs:
         uses: PL-FE/productive-box@master
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GIST_ID: 6194f1b205f4dd2a699b8c12eab05a13
+          GIST_ID: dc832afd43e2c9ae970d6fef2fec241b
           TIMEZONE: Asia/Shanghai
